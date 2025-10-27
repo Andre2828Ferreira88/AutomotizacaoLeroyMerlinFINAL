@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Dashboard</h2>
+            <small class="text-muted">Carregue a planilha mensal para visualizar os prestadores.</small>
+        </div>
+        <div>
+            <form method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                <input class="form-control form-control-sm" type="file" name="file" accept=".csv,.xls,.xlsx" required>
+                <button class="btn btn-primary btn-sm ms-2" type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    {% if last %}
+    <div class="mb-3">
+        <strong>Último upload:</strong> {{ last.original }} em {{ last.time }}
+    </div>
+    {% endif %}
+
+    <p>Selecione um prestador no menu para ver detalhes individuais.</p>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-3">
+    {% for p in prestadores %}
+    {% set cor = p.comparacao.cor if p.comparacao else 'primary' %}
+    <div class="col">
+        <div class="card h-100 border-{{ cor }} shadow-sm" style="border-width:2px;">
+            <div class="card-body bg-{{ cor }}-subtle">
+                <h5 class="card-title">{{ p.nome }}</h5>
+                {% if p.comparacao %}
+                    <p class="card-text">
+                        <strong>{{ p.comparacao.status }}</strong><br>
+                        Diferença: {{ p.comparacao.diff }}
+                    </p>
+                {% else %}
+                    <p class="card-text text-muted">Sem dados de comparação ainda.</p>
+                {% endif %}
+                <a href="{{ url_for('prestador', prestador_id=p.id) }}" class="btn btn-outline-{{ cor }}">Abrir</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

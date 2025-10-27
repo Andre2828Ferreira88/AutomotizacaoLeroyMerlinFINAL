@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel de Prestadores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+      <div class="container-fluid">
+        <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuPrestadores" aria-controls="menuPrestadores">
+          ☰ Prestadores
+        </button>
+        <span class="navbar-brand mb-0 h1">Painel de Prestadores</span>
+      </div>
+    </nav>
+
+    <div class="d-flex">
+        <div class="sidebar d-none d-md-block bg-dark text-white p-3">
+            <h5>Painel</h5>
+            <input id="buscarDesktop" class="form-control mb-2" placeholder="🔍 Buscar prestador...">
+            <div id="listaPrestadoresDesktop" class="list-group list-group-flush mt-2">
+                {% for p in prestadores %}
+                  <a href="{{ url_for('prestador', prestador_id=p.id) }}" class="list-group-item list-group-item-action bg-dark text-white">{{ p.nome }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="menuPrestadores">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Prestadores</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+          </div>
+          <div class="offcanvas-body">
+            <input id="buscarMobile" class="form-control mb-2" placeholder="🔍 Buscar prestador...">
+            <div id="listaPrestadoresMobile" class="list-group mt-2">
+                {% for p in prestadores %}
+                  <a href="{{ url_for('prestador', prestador_id=p.id) }}" class="list-group-item list-group-item-action bg-dark text-white">{{ p.nome }}</a>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="content flex-grow-1 p-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, msg in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ msg }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ Chart.js primeiro -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- ✅ Seus scripts depois -->
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script>
+
+</body>
+</html>

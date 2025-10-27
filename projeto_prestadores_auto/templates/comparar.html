@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Comparar Planilhas</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label>Selecione o 1º arquivo:</label>
+        <select name="mes1" class="form-select">
+            {% for f in arquivos %}<option value="{{ f }}">{{ f }}</option>{% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Selecione o 2º arquivo:</label>
+        <select name="mes2" class="form-select">
+            {% for f in arquivos %}<option value="{{ f }}">{{ f }}</option>{% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Prestador:</label>
+        <select name="prestador" class="form-select">
+            {% for nome in prestadores %}<option value="{{ nome }}">{{ nome }}</option>{% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Comparar</button>
+</form>
+{% endblock %}

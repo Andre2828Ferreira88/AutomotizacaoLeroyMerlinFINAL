@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h2>Prestador: {{ prestador.nome }}</h2>
+            <p class="mb-0"><strong>Total de serviços no arquivo:</strong> {{ prestador.total }}</p>
+        </div>
+        <div>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <div class="card p-3">
+                <h5>Distribuição por Tipo de Serviço</h5>
+                <canvas id="graficoTipos" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card p-3">
+                <h5>Detalhes por Tipo (barras)</h5>
+                <canvas id="graficoServicos" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tipos = JSON.parse('{{ tipos | safe }}');
+    const tipos_val = JSON.parse('{{ tipos_val | safe }}');
+
+    const ctxPie = document.getElementById('graficoTipos').getContext('2d');
+    const ctxBar = document.getElementById('graficoServicos').getContext('2d');
+
+    new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: tipos,
+            datasets: [{
+                data: tipos_val,
+                backgroundColor: ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948']
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: tipos,
+            datasets: [{
+                label: 'Quantidade',
+                data: tipos_val,
+                backgroundColor: '#4e79a7'
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+});
+</script>
+
+
+{% endblock %}

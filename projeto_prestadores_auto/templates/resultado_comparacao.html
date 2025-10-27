@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Resultado da Comparação — {{ prestador }}</h2>
+<p>Entre os arquivos <strong>{{ mes1 }}</strong> e <strong>{{ mes2 }}</strong>.</p>
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Serviço</th><th>{{ mes1 }}</th><th>{{ mes2 }}</th><th>Diferença</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+        {% for c in comparacao %}
+        <tr>
+            <td>{{ c.servico }}</td>
+            <td>{{ c.mes1 }}</td>
+            <td>{{ c.mes2 }}</td>
+            <td>{{ c.dif }}</td>
+            <td>
+                {% if c.status == "Aumentou" %}<span class="text-success">{{ c.status }}</span>
+                {% elif c.status == "Diminuiu" %}<span class="text-danger">{{ c.status }}</span>
+                {% else %}<span class="text-muted">{{ c.status }}</span>{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Voltar</a>
+{% endblock %}
